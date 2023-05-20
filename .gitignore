@@ -1,0 +1,6 @@
+.idea
+.env
+.DS_Store
+__pycache__/
+redis_data/
+celerybeat-schedule
