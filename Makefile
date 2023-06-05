@@ -2,8 +2,12 @@ ifndef workers
 override workers = 3
 endif
 
+
+del-redis:
+	rm redis_data/dump.rdb
+
 down:
-	rm celerybeat-schedule || true && docker compose down
+	rm examples/celerybeat-schedule || true && docker compose down
 
 build:
 	docker compose build

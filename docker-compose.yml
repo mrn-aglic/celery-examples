@@ -15,7 +15,7 @@ services:
     ports:
       - '6379:6379'
 
-  worker:
+  worker-default:
     image: celery-examples
     volumes:
       - .:/app
@@ -23,12 +23,23 @@ services:
       - redis
     env_file:
       - .env
-    entrypoint: ['./entrypoint.sh', 'worker']
+    entrypoint: ['./entrypoint.sh', 'worker', 'default']
+
+  worker-other-queue:
+    image: celery-examples
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    entrypoint: [ './entrypoint.sh', 'worker', 'other_queue']
 
 
   scheduler:
     build: .
     image: celery-examples
+    container_name: celery-examples-scheduler
     volumes:
       - .:/app
     depends_on:
