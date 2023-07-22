@@ -1,0 +1,8 @@
+task_manager/
+redis_data/
+.*
+flower/Dockerfile
+docker-compose.*
+Dockerfile
+Makefile
+Readme.md

@@ -2,7 +2,6 @@ ifndef workers
 override workers = 3
 endif
 
-
 del-redis:
 	rm redis_data/dump.rdb
 

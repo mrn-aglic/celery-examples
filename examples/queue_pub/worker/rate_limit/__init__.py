@@ -32,7 +32,9 @@ def _get_queue_name(task_name: str) -> str:
     return celeryconfig.default_queue.name
 
 
-def get_routing_key_and_exchange(celeryapp: Celery, task_name: str) -> typing.Tuple[str, str]:
+def get_routing_key_and_exchange(
+    celeryapp: Celery, task_name: str
+) -> typing.Tuple[str, str]:
     router = celeryapp.amqp.router
 
     queue_name = _get_queue_name(task_name)
@@ -68,7 +70,6 @@ def publish_task(
             )
     except Exception as ex:
         print(ex)
-
 
 
 def send_task(celeryapp: Celery, message: kombu.Message):
@@ -123,5 +124,7 @@ def rate_limiter(self):
 
         routing_key, exchange_name = get_routing_key_and_exchange(celeryapp, name)
 
-        publish_task(celeryapp, message, routing_key=routing_key, exchange_name=exchange_name)
+        publish_task(
+            celeryapp, message, routing_key=routing_key, exchange_name=exchange_name
+        )
         # send_task(celeryapp, message)

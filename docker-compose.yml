@@ -15,6 +15,16 @@ services:
     ports:
       - '6379:6379'
 
+  worker:
+    image: celery-examples
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    entrypoint: [ './entrypoint.sh', 'worker', 'default' ]
+
   worker-default:
     image: celery-examples
     volumes:
@@ -48,20 +58,20 @@ services:
       - .env
     entrypoint: ['./entrypoint.sh', 'scheduler']
 
-#  flower:
-#    build:
-#      context: ./
-#      dockerfile: flower/.
-#    command: ['./entrypoint.sh', 'flower']
-#    volumes:
-#      - ./flower_data:/db
-#      - .:/app
-#    depends_on:
-#      redis:
-#        condition: service_healthy
-#      worker:
-#        condition: service_started
-#    env_file:
-#      - .env
-#    ports:
-#      - '5555:5555'
+  flower:
+    build:
+      context: ./
+      dockerfile: flower/Dockerfile
+    command: ['./entrypoint.sh', 'flower']
+    volumes:
+      - ./flower_data:/db
+      - .:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+      worker:
+        condition: service_started
+    env_file:
+      - .env
+    ports:
+      - '5555:5555'

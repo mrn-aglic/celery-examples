@@ -13,4 +13,3 @@ def setup_periodic_tasks(sender, **kwargs):
 
     except Exception as e:
         logger.error(f"An exception occurred: {e}")
-
