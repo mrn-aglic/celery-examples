@@ -2,7 +2,7 @@
 
 echo $1
 
-export example=queue_pub
+#export example=queue_pub
 
 cd /app/examples || return
 
