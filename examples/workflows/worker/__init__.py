@@ -2,7 +2,7 @@ from os import environ
 
 from celery.utils.log import get_task_logger
 from workflows.celeryapp import app
-from workflows.worker.test_tasks import print_task, simple_pipeline
+from workflows.worker.test_tasks import insert_chain, print_task, simple_pipeline
 
 logger = get_task_logger(__name__)
 

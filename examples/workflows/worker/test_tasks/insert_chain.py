@@ -1,5 +1,7 @@
 import typing
 
+import celery
+from celery import shared_task, subtask
 from workflows.celeryapp import app
 
 
@@ -28,6 +30,20 @@ def square_list(self, xs: typing.List[int]):
 
 
 @app.task(bind=True)
+def square(self, a: int):
+    print_info(self)
+
+    return a**2
+
+
+@app.task(bind=True)
+def tsum(self, result: typing.List[int]):
+    print_info(self)
+
+    return sum(result)
+
+
+@app.task(bind=True)
 def print_result(self, *arg):
     result = arg[0]
     print_info(self)
@@ -35,7 +51,22 @@ def print_result(self, *arg):
     print(f"print_result arg: {result}")
 
 
-@app.task(bind=True)
-def pipeline(self):
+@shared_task(bind=True)
+def insert_chain(self, result=None, branch=None):
     print_info(self)
-    return (return_list.s(n=5) | square_list.s() | print_result.s()).apply_async()
+
+    # pass in args from previous task (if there are any)
+    sig = subtask(branch).clone(args=(result,))
+
+    if isinstance(sig, celery.canvas._chain):
+        sig.args = (result,)
+
+    return self.replace(sig)
+
+
+@app.task
+def pipeline():
+    replacement = square_list.s() | tsum.s()
+    return (
+        return_list.s(n=5) | insert_chain.s(replacement) | print_result.s()
+    ).apply_async()
