@@ -30,13 +30,6 @@ def square_list(self, xs: typing.List[int]):
 
 
 @app.task(bind=True)
-def square(self, a: int):
-    print_info(self)
-
-    return a**2
-
-
-@app.task(bind=True)
 def tsum(self, result: typing.List[int]):
     print_info(self)
 
