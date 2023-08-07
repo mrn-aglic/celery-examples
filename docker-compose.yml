@@ -54,6 +54,8 @@ services:
       - .:/app
     depends_on:
       - redis
+    environment:
+      - instance=scheduler
     env_file:
       - .env
     entrypoint: ['./entrypoint.sh', 'scheduler']
