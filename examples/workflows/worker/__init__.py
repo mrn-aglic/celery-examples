@@ -2,7 +2,6 @@ from celery.utils.log import get_task_logger
 from workflows.celeryapp import app
 from workflows.worker.test_tasks import (
     insert_chain,
-    mapping,
     print_task,
     simple_pipeline,
     split_group,
